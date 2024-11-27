@@ -84,7 +84,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        config: [generic]
+        config: [cloud]
     steps:
       - working-directory: linux-${{ env.KERNEL_STABLE_VER }}
         run: |
@@ -170,7 +170,7 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        config: [generic]
+        config: [cloud]
     steps:
       - working-directory: linux-${{ env.KERNEL_STABLE_VER }}
         env:
@@ -201,7 +201,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        config: [generic]
+        config: [cloud]
     steps:
       - uses: actions/upload-artifact@v4
         with:
@@ -216,7 +216,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        config: [generic]
+        config: [cloud]
     steps:
       - uses: actions/upload-artifact@v4
         with:
@@ -234,7 +234,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config: [generic]
+        config: [cloud]
     steps:
       - if: ${{ github.event.inputs.release != 'none' }}
         uses: ncipollo/release-action@v1
