@@ -20,7 +20,7 @@ env:
 jobs:
   apt:
     name: Setup dependencies
-    runs-on: self-hosted
+    runs-on: github-hosted
     steps:
       - run: |
             sudo apt-get update \
@@ -37,7 +37,7 @@ jobs:
   checkout:
     name: Checkout main repo
     needs: apt
-    runs-on: self-hosted
+    runs-on: github-hosted
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,7 +46,7 @@ jobs:
   download_source:
     name: Download linux kernel source
     needs: [apt, checkout]
-    runs-on: self-hosted
+    runs-on: github-hosted
     steps:
       - run: |
             wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${{ env.KERNEL_STABLE_VER }}.tar.xz \
@@ -55,7 +55,7 @@ jobs:
   apply_patch:
     name: Apply patches
     needs: [apt, checkout, download_source]
-    runs-on: self-hosted
+    runs-on: github-hosted
     steps:
       - working-directory: linux-${{ env.KERNEL_STABLE_VER }}
         run: |
@@ -79,7 +79,7 @@ jobs:
   setup_config:
     name: Setup config
     needs: [apt, checkout, download_source, apply_patch]
-    runs-on: self-hosted
+    runs-on: github-hosted
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -165,7 +165,7 @@ jobs:
   build_kernel:
     name: Build Kernel
     needs: [apt, checkout, download_source, apply_patch, setup_config]
-    runs-on: self-hosted
+    runs-on: github-hosted
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -196,7 +196,7 @@ jobs:
   upload_config:
     name: Upload config
     needs: [apt, checkout, download_source, apply_patch, setup_config, build_kernel]
-    runs-on: self-hosted
+    runs-on: github-hosted
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -230,7 +230,7 @@ jobs:
   release:
     name: Release
     needs: [apt, checkout, download_source, apply_patch, setup_config, build_kernel]
-    runs-on: self-hosted
+    runs-on: github-hosted
     strategy:
       fail-fast: false
       matrix:
