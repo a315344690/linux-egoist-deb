@@ -12,7 +12,7 @@ on:
           - release
 
 env:
-  HOME: /home/runner
+  HOME: /home/wangqianyu/actions-runner
   KERNEL_STABLE_VER: 6.10.4
   PKGVER: 1
   LLVM_VER: 18.1.8
