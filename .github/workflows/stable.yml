@@ -30,9 +30,9 @@ jobs:
                  gawk openssl libssl-dev dkms libudev-dev \
                  libpci-dev libiberty-dev autoconf \
                  debhelper lz4 \
-            && if [ ! -d ~/llvm-${{ env.LLVM_VER }}-x86_64 ]; then
-                 curl -O https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-${{ env.LLVM_VER }}-x86_64.tar.gz \
-                 && tar avxf llvm-${{ env.LLVM_VER }}-x86_64.tar.gz -C ~/
+            && if [ ! -d ~/llvm-${{ env.LLVM_VER }}-aarch64 ]; then
+                 curl -O https://mirrors.edge.kernel.org/pub/tools/llvm/files/llvm-${{ env.LLVM_VER }}-aarch64.tar.gz \
+                 && tar avxf llvm-${{ env.LLVM_VER }}-aarch64.tar.gz -C ~/
                fi
   checkout:
     name: Checkout main repo
@@ -181,14 +181,14 @@ jobs:
           make \
             KBUILD_OUTPUT=../${{ matrix.config }} \
             KCONFIG_CONFIG=../config.${{ matrix.config }} \
-            LLVM=~/llvm-${{ env.LLVM_VER }}-x86_64/bin/ \
+            LLVM=~/llvm-${{ env.LLVM_VER }}-aarch64/bin/ \
             LLVM_IAS=1 \
             olddefconfig
           make \
             KBUILD_OUTPUT=../${{ matrix.config }} \
             KCONFIG_CONFIG=../config.${{ matrix.config }} \
             KDEB_PKGVERSION=$(make kernelversion)-${{ env.PKGVER }} \
-            LLVM=~/llvm-${{ env.LLVM_VER }}-x86_64/bin/ \
+            LLVM=~/llvm-${{ env.LLVM_VER }}-aarch64/bin/ \
             LLVM_IAS=1 \
             -j`nproc` \
             bindeb-pkg
@@ -222,9 +222,9 @@ jobs:
         with:
           name: deb.${{ matrix.config }}
           path: |
-            linux-image-${{ env.KERNEL_STABLE_VER }}-egoist-${{ matrix.config }}_${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}_amd64.deb
-            linux-headers-${{ env.KERNEL_STABLE_VER }}-egoist-${{ matrix.config }}_${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}_amd64.deb
-            linux-libc-dev_${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}_amd64.deb
+            linux-image-${{ env.KERNEL_STABLE_VER }}-egoist-${{ matrix.config }}_${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}_aarch64.deb
+            linux-headers-${{ env.KERNEL_STABLE_VER }}-egoist-${{ matrix.config }}_${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}_aarch64.deb
+            linux-libc-dev_${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}_aarch64.deb
           compression-level: 0
 
   release:
@@ -241,9 +241,9 @@ jobs:
         with:
           allowUpdates: true
           artifacts: |
-            linux-image-${{ env.KERNEL_STABLE_VER }}-egoist-${{ matrix.config }}_${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}_amd64.deb
-            linux-headers-${{ env.KERNEL_STABLE_VER }}-egoist-${{ matrix.config }}_${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}_amd64.deb
-            linux-libc-dev_${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}_amd64.deb
+            linux-image-${{ env.KERNEL_STABLE_VER }}-egoist-${{ matrix.config }}_${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}_aarch64.deb
+            linux-headers-${{ env.KERNEL_STABLE_VER }}-egoist-${{ matrix.config }}_${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}_aarch64.deb
+            linux-libc-dev_${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}_aarch64.deb
           prerelease: ${{ github.event.inputs.release == 'pre-release' }}
           makeLatest: ${{ github.event.inputs.release == 'release' }}
           tag: ${{ env.KERNEL_STABLE_VER }}-${{ env.PKGVER }}
